@@ -19,6 +19,19 @@ let lastTapY = 0;
 const doubleTapDelay = 300;
 let mode = 0;
 let lastTouches = 0;
+const followDiv = (e) => {
+  if (mode === 0) {
+    if (followingElement !== null) {
+      followingElement.style.left = e.clientX + "px";
+      followingElement.style.top = e.clientY + "px";
+    }
+  } else {
+    if (followingElement !== null) {
+      followingElement.style.left = e.touches[0].pageX + "px";
+      followingElement.style.top = e.touches[0].pageY + "px";
+    }
+  }
+};
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
@@ -32,19 +45,6 @@ for (let i = 0; i < target.length; i++) {
     const mouseOffsetY = e.clientY - mouseStartY;
     element.style.left = divStartX + mouseOffsetX + "px";
     element.style.top = divStartY + mouseOffsetY + "px";
-  };
-  const followDiv = (e) => {
-    if (mode === 0) {
-      if (followingElement !== null) {
-        followingElement.style.left = e.clientX + "px";
-        followingElement.style.top = e.clientY + "px";
-      }
-    } else {
-      if (followingElement !== null) {
-        followingElement.style.left = e.touches[0].pageX + "px";
-        followingElement.style.top = e.touches[0].pageY + "px";
-      }
-    }
   };
   const abort = (e) => {
     if (e.key === "Escape" || e.keyCode === 27) {
@@ -103,7 +103,6 @@ for (let i = 0; i < target.length; i++) {
   element.addEventListener("touchstart", (e) => {
     e.preventDefault();
     mode = 1;
-    console.log(e.touches.length, lastTouches);
     if (e.touches.length === 1) {
       initialTouchPos.x = e.touches[0].pageX;
       initialTouchPos.y = e.touches[0].pageY;
@@ -119,19 +118,11 @@ for (let i = 0; i < target.length; i++) {
         divStartY = element.offsetTop;
         followingElement = element;
         document.addEventListener("touchmove", followDiv);
-        element.addEventListener("keydown", abort);
       }
       lastTapTime = now;
       lastTapX = touch.clientX;
       lastTapY = touch.clientY;
       lastTouches = 1;
-    }
-    if (e.touches.length === 2 && lastTouches === 1) {
-      console.log("hi");
-      element.removeEventListener("keydown", abort);
-      document.removeEventListener("touchmove", followDiv);
-      followingElement = null;
-      lastTouches = 0;
     }
   });
   element.addEventListener("touchmove", function (e) {});
@@ -145,7 +136,6 @@ for (let i = 0; i < target.length; i++) {
       Math.abs(touch.pageX - lastTapX) < 10 &&
       Math.abs(touch.pageY - lastTapY) < 10
     ) {
-      element.removeEventListener("keydown", abort);
       document.removeEventListener("touchmove", followDiv);
       followingElement = null;
     }
@@ -191,6 +181,11 @@ workspace.addEventListener("touchstart", function (e) {
   if (e.touches.length === 1) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
+  } else if (e.touches.length === 2 && lastTouches === 1) {
+    document.removeEventListener("touchmove", followDiv);
+    element.style.left = divStartX + "px";
+    element.style.top = divStartY + "px";
+    followingElement = null;
   }
 });
 workspace.addEventListener("touchend", function (e) {
