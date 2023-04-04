@@ -207,14 +207,14 @@ workspace.addEventListener("touchstart", function (e) {
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
     console.log("start");
-    touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+    touchStartDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
   }
 });
 workspace.addEventListener("touchmove", (e) => {
   if (e.touches.length === 2) {
     console.log(e.touches[0].clientX, e.touches[1].clientX);
     console.log(touchMoveDistance, touchStartDistance);
-    touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+    touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
     let deltaDistance = touchMoveDistance - touchStartDistance;
     let scale = 1 + deltaDistance / 100;
     selectDiv.style.transform = `scale(${scale})`;
