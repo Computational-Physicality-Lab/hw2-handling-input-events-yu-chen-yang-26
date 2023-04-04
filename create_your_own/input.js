@@ -186,13 +186,13 @@ workspace.addEventListener("touchstart", function (e) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
   } else if (e.touches.length === 2 && lastTouches === 1) {
-    console.log(currentElement);
-    document.removeEventListener("touchmove", followDiv);
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
     console.log(divStartX, divStartY);
     console.log(currentElement.style.left, currentElement.style.top);
+    document.removeEventListener("touchmove", followDiv);
     followingElement = null;
+    console.log("test");
   }
 });
 workspace.addEventListener("touchend", function (e) {
