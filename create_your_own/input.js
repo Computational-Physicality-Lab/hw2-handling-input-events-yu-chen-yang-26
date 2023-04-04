@@ -22,6 +22,8 @@ let lastTouches = 0;
 let currentElement = null;
 let divStartX = 0;
 let divStartY = 0;
+let mouseStartX = 0;
+let mouseStartY = 0;
 const followDiv = (e) => {
   if (mode === 0) {
     if (followingElement !== null) {
@@ -35,11 +37,16 @@ const followDiv = (e) => {
     }
   }
 };
+const dragDiv = (e) => {
+  e.preventDefault();
+  const touchOffsetX = e.touches[0].clientX - initialTouchPos.x;
+  const touchOffsetY = e.touches[0].clientY - initialTouchPos.y;
+  currentElement.style.left = divStartX + touchOffsetX + "px";
+  currentElement.style.top = divStartY + touchOffsetY + "px";
+};
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
-  let mouseStartX = 0;
-  let mouseStartY = 0;
   const moveDiv = (e) => {
     dragging = true;
     const mouseOffsetX = e.clientX - mouseStartX;
@@ -106,8 +113,8 @@ for (let i = 0; i < target.length; i++) {
     e.preventDefault();
     mode = 1;
     if (e.touches.length === 1) {
-      initialTouchPos.x = e.touches[0].pageX;
-      initialTouchPos.y = e.touches[0].pageY;
+      initialTouchPos.x = e.touches[0].clientX;
+      initialTouchPos.y = e.touches[0].clientY;
       const now = Date.now();
       const touch = e.touches[0];
       if (
@@ -116,18 +123,18 @@ for (let i = 0; i < target.length; i++) {
         Math.abs(touch.clientY - lastTapY) < 10
       ) {
         // 雙擊事件
-        divStartX = element.offsetLeft;
-        divStartY = element.offsetTop;
         followingElement = element;
         document.addEventListener("touchmove", followDiv);
       }
+      divStartX = element.offsetLeft;
+      divStartY = element.offsetTop;
       lastTapTime = now;
       lastTapX = touch.clientX;
       lastTapY = touch.clientY;
       lastTouches = 1;
     }
   });
-  element.addEventListener("touchmove", function (e) {});
+  element.addEventListener("touchmove", dragDiv);
   element.addEventListener("touchend", (e) => {
     e.preventDefault();
     const now = Date.now();
@@ -159,6 +166,7 @@ for (let i = 0; i < target.length; i++) {
       }
     }
     initialTouchPos = { x: 0, y: 0 };
+    // element.style.transform = "";
   });
 }
 
@@ -180,21 +188,16 @@ workspace.addEventListener("click", (e) => {
 // 單指點擊背景 - 取消選取任何 div 。
 workspace.addEventListener("touchstart", function (e) {
   e.preventDefault();
-  console.log(e.touches.length, lastTouches);
   if (e.touches.length === 1) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
   } else if (e.touches.length === 2 && lastTouches === 1) {
-    console.log("hi");
-    console.log(currentElement.style.left, currentElement.style.top);
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
-    console.log(divStartX, divStartY);
-    console.log(currentElement.style.left, currentElement.style.top);
     document.removeEventListener("touchmove", followDiv);
+    currentElement.removeEventListener("touchmove", dragDiv);
     followingElement = null;
     currentElement = null;
-    console.log("test");
   }
 });
 workspace.addEventListener("touchend", function (e) {
