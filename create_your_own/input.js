@@ -233,6 +233,8 @@ workspace.addEventListener("touchend", function (e) {
 });
 workspace.addEventListener("touchmove", (e) => {
   if (e.touches.length === 2) {
+    console.log(e.touches[0].clientX, e.touches[1].clientX);
+    console.log(touchMoveDistance, touchStartDistance);
     touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
     let deltaDistance = touchMoveDistance - touchStartDistance;
     let scale = 1 + deltaDistance / 100;
