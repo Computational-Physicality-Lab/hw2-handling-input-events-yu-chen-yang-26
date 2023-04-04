@@ -165,12 +165,12 @@ body{
     }
     .home-textbox-header{
         padding: 1vmin;
-        font-size: 3vmin;
+        font-size: 2.7vmin;
         color: #ce818e;
     }
     .home-textbox-content{
         padding: 1vmin;
-        font-size: 2vmin;
+        font-size: 1.7vmin;
         color: grey;
     }
 }

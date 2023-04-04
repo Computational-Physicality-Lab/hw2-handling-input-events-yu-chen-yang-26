@@ -11,6 +11,7 @@ const target = document.getElementsByClassName("target");
 let followingElement = null;
 let dragging = false;
 let escaping = false;
+// let lastTouchPos = null;
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
@@ -82,6 +83,46 @@ for (let i = 0; i < target.length; i++) {
     document.addEventListener("mousemove", followDiv);
     element.addEventListener("keydown", abort);
   });
+
+  // 單指點擊div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
+  element.addEventListener("touchstart", function (e) {
+    e.preventDefault();
+    if (e.touches.length === 1) {
+      lastTouchPos = {
+        x: e.touches[0].pageX,
+        y: e.touches[0].pageY,
+      };
+    }
+  });
+  element.addEventListener("touchend", function (e) {
+    e.preventDefault();
+    if (e.touches.length === 0 && e.changedTouches.length === 1) {
+      var dx = e.changedTouches[0].pageX - lastTouchPos.x;
+      var dy = e.changedTouches[0].pageY - lastTouchPos.y;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < 10) {
+        e.stopPropagation();
+        if (!dragging) {
+          for (let j = 0; j < target.length; j++) {
+            const other = target[j];
+            if (other.style.backgroundColor === "rgb(0, 0, 255)") {
+              other.style.backgroundColor = "red";
+            }
+          }
+          element.style.backgroundColor = "#00f";
+        }
+      }
+    }
+    lastTouchPos = null;
+  });
+  element.addEventListener("touchmove", function (e) {
+    if (e.touches.length === 1) {
+      lastTouchPos = {
+        x: e.touches[0].pageX,
+        y: e.touches[0].pageY,
+      };
+    }
+  });
 }
 
 // 滑鼠點擊背景 - 取消選取任何 div 。
@@ -97,5 +138,44 @@ workspace.addEventListener("click", (e) => {
     }
   } else {
     escaping = false;
+  }
+});
+// 單指點擊背景 - 取消選取任何 div 。
+workspace.addEventListener("touchstart", function (e) {
+  e.preventDefault();
+  if (e.touches.length === 1) {
+    lastTouchPos = {
+      x: e.touches[0].pageX,
+      y: e.touches[0].pageY,
+    };
+  }
+});
+workspace.addEventListener("touchend", function (e) {
+  e.preventDefault();
+  if (e.touches.length === 0 && e.changedTouches.length === 1) {
+    var dx = e.changedTouches[0].pageX - lastTouchPos.x;
+    var dy = e.changedTouches[0].pageY - lastTouchPos.y;
+    var distance = Math.sqrt(dx * dx + dy * dy);
+    if (distance < 10) {
+      if (!escaping) {
+        for (let j = 0; j < target.length; j++) {
+          const other = target[j];
+          if (other.style.backgroundColor === "rgb(0, 0, 255)") {
+            other.style.backgroundColor = "red";
+          }
+        }
+      } else {
+        escaping = false;
+      }
+    }
+  }
+  lastTouchPos = null;
+});
+workspace.addEventListener("touchmove", function (e) {
+  if (e.touches.length === 1) {
+    lastTouchPos = {
+      x: e.touches[0].pageX,
+      y: e.touches[0].pageY,
+    };
   }
 });
