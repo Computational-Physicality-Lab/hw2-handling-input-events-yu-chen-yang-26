@@ -129,7 +129,6 @@ for (let i = 0; i < target.length; i++) {
   });
   element.addEventListener("touchmove", function (e) {});
   element.addEventListener("touchend", (e) => {
-    currentElement = null;
     e.preventDefault();
     const now = Date.now();
     const touch = e.changedTouches[0];
@@ -186,12 +185,14 @@ workspace.addEventListener("touchstart", function (e) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
   } else if (e.touches.length === 2 && lastTouches === 1) {
+    console.log("hi");
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
     console.log(divStartX, divStartY);
     console.log(currentElement.style.left, currentElement.style.top);
     document.removeEventListener("touchmove", followDiv);
     followingElement = null;
+    currentElement = null;
     console.log("test");
   }
 });
