@@ -20,6 +20,8 @@ const doubleTapDelay = 300;
 let mode = 0;
 let lastTouches = 0;
 let currentElement = null;
+let divStartX = 0;
+let divStartY = 0;
 const followDiv = (e) => {
   if (mode === 0) {
     if (followingElement !== null) {
@@ -38,8 +40,6 @@ for (let i = 0; i < target.length; i++) {
   element.setAttribute("tabindex", "1");
   let mouseStartX = 0;
   let mouseStartY = 0;
-  let divStartX = 0;
-  let divStartY = 0;
   const moveDiv = (e) => {
     dragging = true;
     const mouseOffsetX = e.clientX - mouseStartX;
