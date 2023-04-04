@@ -24,6 +24,9 @@ let divStartX = 0;
 let divStartY = 0;
 let mouseStartX = 0;
 let mouseStartY = 0;
+let touchStartDistance = 0;
+let touchMoveDistance = 0;
+
 const followDiv = (e) => {
   if (mode === 0) {
     if (followingElement !== null) {
@@ -43,10 +46,18 @@ const dragDiv = (e) => {
   const touchOffsetY = e.touches[0].clientY - initialTouchPos.y;
   currentElement.style.left = divStartX + touchOffsetX + "px";
   currentElement.style.top = divStartY + touchOffsetY + "px";
+  if (e.touches.length === 2) {
+    touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+    let deltaDistance = touchMoveDistance - touchStartDistance;
+    let scale = 1 + deltaDistance / 100;
+    element.style.transform = `scale(${scale})`;
+  }
 };
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
+  element.style.minWidth = "5px";
+  element.style.minHeight = "5px";
   const moveDiv = (e) => {
     dragging = true;
     const mouseOffsetX = e.clientX - mouseStartX;
@@ -132,6 +143,8 @@ for (let i = 0; i < target.length; i++) {
       lastTapX = touch.clientX;
       lastTapY = touch.clientY;
       lastTouches = 1;
+    } else if (e.touches.length === 2) {
+      touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
     }
   });
   element.addEventListener("touchmove", dragDiv);
