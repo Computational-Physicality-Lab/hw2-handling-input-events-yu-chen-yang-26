@@ -22,6 +22,8 @@ let lastTouches = 0;
 let currentElement = null;
 let divStartX = 0;
 let divStartY = 0;
+let divStartWidth = 0;
+let divStartHeight = 0;
 let mouseStartX = 0;
 let mouseStartY = 0;
 let touchStartDistance = 0;
@@ -47,11 +49,19 @@ const dragDiv = (e) => {
   currentElement.style.left = divStartX + touchOffsetX + "px";
   currentElement.style.top = divStartY + touchOffsetY + "px";
 };
+const scaling = (e) => {
+  if (e.touches.length === 2) {
+    touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+    let deltaDistance = touchMoveDistance - touchStartDistance;
+    let scale = 1 + deltaDistance / 100;
+    selectDiv.style.transform = `scale(${scale})`;
+  }
+};
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
-  element.style.minWidth = "5px";
-  element.style.minHeight = "5px";
+  element.style.minWidth = "20px";
+  element.style.minHeight = "20px";
   const moveDiv = (e) => {
     dragging = true;
     const mouseOffsetX = e.clientX - mouseStartX;
@@ -172,7 +182,6 @@ for (let i = 0; i < target.length; i++) {
       }
     }
     initialTouchPos = { x: 0, y: 0 };
-    // element.style.transform = "";
   });
 }
 
@@ -206,20 +215,17 @@ workspace.addEventListener("touchstart", function (e) {
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
-    console.log("start");
+    divStartWidth = selectDiv.style.width;
+    divStartHeight = selectDiv.style.height;
     touchStartDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+    workspace.addEventListener("touchmove", scaling);
+  } else if (e.touches.length === 3) {
+    selectDiv.style.width = divStartWidth;
+    selectDiv.style.height = divStartHeight;
+    workspace.removeEventListener("touchmove", scaling);
   }
 });
-workspace.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 2) {
-    console.log(e.touches[0].clientX, e.touches[1].clientX);
-    console.log(touchMoveDistance, touchStartDistance);
-    touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
-    let deltaDistance = touchMoveDistance - touchStartDistance;
-    let scale = 1 + deltaDistance / 100;
-    selectDiv.style.transform = `scale(${scale})`;
-  }
-});
+
 workspace.addEventListener("touchend", function (e) {
   e.preventDefault();
   if (e.touches.length === 0 && e.changedTouches.length === 1) {
