@@ -11,7 +11,13 @@ const target = document.getElementsByClassName("target");
 let followingElement = null;
 let dragging = false;
 let escaping = false;
-// let lastTouchPos = null;
+let initialTouchPos = { x: 0, y: 0 };
+let lastTouchPos = { x: 0, y: 0 };
+let lastTapTime = 0;
+let lastTapX = 0;
+let lastTapY = 0;
+const doubleTapDelay = 300;
+let mode = 0;
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
@@ -27,9 +33,16 @@ for (let i = 0; i < target.length; i++) {
     element.style.top = divStartY + mouseOffsetY + "px";
   };
   const followDiv = (e) => {
-    if (followingElement !== null) {
-      followingElement.style.left = e.clientX + "px";
-      followingElement.style.top = e.clientY + "px";
+    if (mode === 0) {
+      if (followingElement !== null) {
+        followingElement.style.left = e.clientX + "px";
+        followingElement.style.top = e.clientY + "px";
+      }
+    } else {
+      if (followingElement !== null) {
+        followingElement.style.left = e.touches[0].pageX + "px";
+        followingElement.style.top = e.touches[0].pageY + "px";
+      }
     }
   };
   const abort = (e) => {
@@ -62,6 +75,7 @@ for (let i = 0; i < target.length; i++) {
   element.addEventListener("mousedown", (e) => {
     dragging = false;
     escaping = false;
+    mode = 0;
     mouseStartX = e.clientX;
     mouseStartY = e.clientY;
     divStartX = element.offsetLeft;
@@ -87,18 +101,37 @@ for (let i = 0; i < target.length; i++) {
   // 單指點擊div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
   element.addEventListener("touchstart", function (e) {
     e.preventDefault();
+    mode = 1;
     if (e.touches.length === 1) {
-      lastTouchPos = {
-        x: e.touches[0].pageX,
-        y: e.touches[0].pageY,
-      };
+      initialTouchPos.x = e.touches[0].pageX;
+      initialTouchPos.y = e.touches[0].pageY;
+      const now = Date.now();
+      const touch = e.touches[0];
+      if (
+        now - lastTapTime < doubleTapDelay &&
+        Math.abs(touch.clientX - lastTapX) < 10 &&
+        Math.abs(touch.clientY - lastTapY) < 10
+      ) {
+        // 雙擊事件
+        divStartX = element.offsetLeft;
+        divStartY = element.offsetTop;
+        followingElement = element;
+        document.addEventListener("touchmove", followDiv);
+        element.addEventListener("keydown", abort);
+        lastTapTime = 0;
+      } else {
+        lastTapTime = now;
+        lastTapX = touch.clientX;
+        lastTapY = touch.clientY;
+      }
     }
   });
+  element.addEventListener("touchmove", function (e) {});
   element.addEventListener("touchend", function (e) {
     e.preventDefault();
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
-      var dx = e.changedTouches[0].pageX - lastTouchPos.x;
-      var dy = e.changedTouches[0].pageY - lastTouchPos.y;
+      var dx = e.changedTouches[0].pageX - initialTouchPos.x;
+      var dy = e.changedTouches[0].pageY - initialTouchPos.y;
       var distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < 10) {
         e.stopPropagation();
@@ -113,15 +146,7 @@ for (let i = 0; i < target.length; i++) {
         }
       }
     }
-    lastTouchPos = null;
-  });
-  element.addEventListener("touchmove", function (e) {
-    if (e.touches.length === 1) {
-      lastTouchPos = {
-        x: e.touches[0].pageX,
-        y: e.touches[0].pageY,
-      };
-    }
+    initialTouchPos = { x: 0, y: 0 };
   });
 }
 
@@ -144,17 +169,15 @@ workspace.addEventListener("click", (e) => {
 workspace.addEventListener("touchstart", function (e) {
   e.preventDefault();
   if (e.touches.length === 1) {
-    lastTouchPos = {
-      x: e.touches[0].pageX,
-      y: e.touches[0].pageY,
-    };
+    initialTouchPos.x = e.touches[0].pageX;
+    initialTouchPos.y = e.touches[0].pageY;
   }
 });
 workspace.addEventListener("touchend", function (e) {
   e.preventDefault();
   if (e.touches.length === 0 && e.changedTouches.length === 1) {
-    var dx = e.changedTouches[0].pageX - lastTouchPos.x;
-    var dy = e.changedTouches[0].pageY - lastTouchPos.y;
+    var dx = e.changedTouches[0].pageX - initialTouchPos.x;
+    var dy = e.changedTouches[0].pageY - initialTouchPos.y;
     var distance = Math.sqrt(dx * dx + dy * dy);
     if (distance < 10) {
       if (!escaping) {
@@ -169,13 +192,6 @@ workspace.addEventListener("touchend", function (e) {
       }
     }
   }
-  lastTouchPos = null;
+  initialTouchPos = { x: 0, y: 0 };
 });
-workspace.addEventListener("touchmove", function (e) {
-  if (e.touches.length === 1) {
-    lastTouchPos = {
-      x: e.touches[0].pageX,
-      y: e.touches[0].pageY,
-    };
-  }
-});
+workspace.addEventListener("touchmove", function (e) {});
