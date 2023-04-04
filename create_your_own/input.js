@@ -206,7 +206,18 @@ workspace.addEventListener("touchstart", function (e) {
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
-    touchStartDistance = abs(e.touches[0].pageX - e.touches[0].pageY);
+    console.log("start");
+    touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+  }
+});
+workspace.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2) {
+    console.log(e.touches[0].clientX, e.touches[1].clientX);
+    console.log(touchMoveDistance, touchStartDistance);
+    touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+    let deltaDistance = touchMoveDistance - touchStartDistance;
+    let scale = 1 + deltaDistance / 100;
+    selectDiv.style.transform = `scale(${scale})`;
   }
 });
 workspace.addEventListener("touchend", function (e) {
@@ -230,15 +241,4 @@ workspace.addEventListener("touchend", function (e) {
     }
   }
   initialTouchPos = { x: 0, y: 0 };
-});
-workspace.addEventListener("touchmove", (e) => {
-  if (e.touches.length === 2) {
-    console.log(e.touches[0].clientX, e.touches[1].clientX);
-    console.log(touchMoveDistance, touchStartDistance);
-    touchMoveDistance = abs(e.touches[0].pageX - e.touches[1].pageX);
-    let deltaDistance = touchMoveDistance - touchStartDistance;
-    let scale = 1 + deltaDistance / 100;
-    console.log(deltaDistance, scale);
-    selectDiv.style.transform = `scale(${scale})`;
-  }
 });
