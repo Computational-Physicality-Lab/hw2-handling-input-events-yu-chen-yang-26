@@ -178,6 +178,7 @@ workspace.addEventListener("click", (e) => {
 // 單指點擊背景 - 取消選取任何 div 。
 workspace.addEventListener("touchstart", function (e) {
   e.preventDefault();
+  console.log(e.touches.length, lastTouches);
   if (e.touches.length === 1) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
