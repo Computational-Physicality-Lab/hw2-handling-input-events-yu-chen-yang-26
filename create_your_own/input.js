@@ -18,6 +18,7 @@ let lastTapX = 0;
 let lastTapY = 0;
 const doubleTapDelay = 300;
 let mode = 0;
+let lastTouches = 0;
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
   element.setAttribute("tabindex", "1");
@@ -97,7 +98,7 @@ for (let i = 0; i < target.length; i++) {
     document.addEventListener("mousemove", followDiv);
     element.addEventListener("keydown", abort);
   });
-
+  /////////////////////////////////////////////////////
   // 單指點擊div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
   element.addEventListener("touchstart", (e) => {
     e.preventDefault();
@@ -118,14 +119,17 @@ for (let i = 0; i < target.length; i++) {
         followingElement = element;
         document.addEventListener("touchmove", followDiv);
         element.addEventListener("keydown", abort);
-        lastTapTime = now;
-        lastTapX = touch.clientX;
-        lastTapY = touch.clientY;
-      } else {
-        lastTapTime = now;
-        lastTapX = touch.clientX;
-        lastTapY = touch.clientY;
       }
+      lastTapTime = now;
+      lastTapX = touch.clientX;
+      lastTapY = touch.clientY;
+      lastTouches = 1;
+    }
+    if (e.touches.length === 2 && lastTouches === 1) {
+      element.removeEventListener("keydown", abort);
+      document.removeEventListener("touchmove", followDiv);
+      followingElement = null;
+      lastTouches = 0;
     }
   });
   element.addEventListener("touchmove", function (e) {});
@@ -133,6 +137,7 @@ for (let i = 0; i < target.length; i++) {
     e.preventDefault();
     const now = Date.now();
     const touch = e.changedTouches[0];
+    lastTouches = 0;
     if (
       now - lastTapTime < doubleTapDelay &&
       Math.abs(touch.pageX - lastTapX) < 10 &&
