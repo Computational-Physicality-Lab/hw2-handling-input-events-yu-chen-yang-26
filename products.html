@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SSUI HW1 - Products</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@200;500&family=Open+Sans&display=swap" rel="stylesheet">
+
+  <!-- Your CSS Code -->
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- JSON Shirt Object -->
+  <script src="shirts.js"></script>
+
+  <!-- Your JS Code -->
+  <script src="main.js"></script>
+</head>
+<body onload="initProducts()">
+  <!-- Your Code Here -->
+  <header>
+    <div class="header-bar"></div>
+    <div class="header-banner">        
+      <img class="header-logo" src="./site_images/logo.png" onclick="location.href=('index.html')">
+      <div class="header-name">Scotty Shirts U Illustrate (SSUI) </div>
+      <div class="header-cart" onclick="location.href=('not_implemented.html')">
+        <img class="header-cart-pic" src="./site_images/shopping-cart.svg">
+        <div class="header-cart-number">0</div>
+      </div>
+      <input id="menu-toggle" type="checkbox" />
+      <label class='menu-button-container' for="menu-toggle">
+        <div class="header-hamburger-button">
+          <div class="header-hamburger-button-bar"></div>
+          <div class="header-hamburger-button-bar"></div>
+          <div class="header-hamburger-button-bar"></div>
+        </div>
+      </label>
+      <ul class="header-hamburger-menu">
+        <li onclick="location.href=('not_implemented.html')">Shooping Cart</li>
+        <li onclick="location.href=('products.html')">T-SHIRTS</li>
+        <li onclick="location.href=('not_implemented.html')">CREATE FROM PICTURE</li>
+        <li onclick="location.href=('not_implemented.html')">CREATE YOUR OWN</li>
+        <li onclick="location.href=('not_implemented.html')">LOG IN</li>
+        <li onclick="location.href=('not_implemented.html')">Contact Us</li>
+        <li onclick="location.href=('not_implemented.html')">Site Map</li>
+        <li onclick="location.href=('not_implemented.html')">Privacy Policy</li>
+        <li onclick="location.href=('not_implemented.html')">Careers</li>
+        <li onclick="location.href=('not_implemented.html')">Reviews</li>
+      </ul>
+    </div>
+    
+    <div class="header-menu">
+      <div class="header-menu-item" onclick="location.href=('products.html')">T-SHIRTS</div>
+      <div class="header-menu-item" onclick="location.href=('not_implemented.html')">CREATE FROM PICTURE</div>
+      <div class="header-menu-item" onclick="location.href=('not_implemented.html')">CREATE YOUR OWN</div>
+      <div class="header-menu-item" onclick="location.href=('not_implemented.html')">ABOUT US</div>
+      <div class="header-menu-item" onclick="location.href=('not_implemented.html')">LOG IN</div>
+    </div>
+  </header>
+  <div class="product-body">
+    <div class="product-title">
+      Our T-Shirts
+    </div>
+    <div class="product-items"></div>
+    <div class="product-quick-view">
+      <img class="product-quick-view-front" src="">
+      <img class="product-quick-view-back" src="">
+      <div class="product-quick-view-info">
+        <div class="product-quick-view-name"></div>
+        <div class="product-quick-view-price"></div>
+        <div class="product-quick-view-description"></div>
+        <button class="product-quick-view-close">Close</button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-banner">
+      <div class="footer-banner-item" onclick="location.href=('not_implemented.html')">Contact Us</div>
+      <div class="footer-banner-item" onclick="location.href=('not_implemented.html')">Site Map</div>
+      <div class="footer-banner-item" onclick="location.href=('not_implemented.html')">Privacy Policy</div>
+      <div class="footer-banner-item" onclick="location.href=('not_implemented.html')">Careers</div>
+      <div class="footer-banner-item" onclick="location.href=('not_implemented.html')">Reviews</div>
+      <div class="footer-banner-sign">Designed by Yang, Yu-Chen</div>
+    </div>
+  </footer>
+</body>
+</html>

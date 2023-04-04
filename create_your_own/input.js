@@ -1,0 +1,101 @@
+/*
+* all the code for homework 2 goes into this file.
+You will attach event handlers to the document, workspace, and targets defined in the html file
+to handle mouse, touch and possible other events.
+
+You will certainly need a large number of global variables to keep track of the current modes and states
+of the interaction.
+*/
+
+const target = document.getElementsByClassName("target");
+let followingElement = null;
+let dragging = false;
+let escaping = false;
+for (let i = 0; i < target.length; i++) {
+  const element = target[i];
+  element.setAttribute("tabindex", "1");
+  let mouseStartX = 0;
+  let mouseStartY = 0;
+  let divStartX = 0;
+  let divStartY = 0;
+  const moveDiv = (e) => {
+    dragging = true;
+    const mouseOffsetX = e.clientX - mouseStartX;
+    const mouseOffsetY = e.clientY - mouseStartY;
+    element.style.left = divStartX + mouseOffsetX + "px";
+    element.style.top = divStartY + mouseOffsetY + "px";
+  };
+  const followDiv = (e) => {
+    if (followingElement !== null) {
+      followingElement.style.left = e.clientX + "px";
+      followingElement.style.top = e.clientY + "px";
+    }
+  };
+  const abort = (e) => {
+    if (e.key === "Escape" || e.keyCode === 27) {
+      dragging = false;
+      escaping = true;
+      followingElement = null;
+      element.style.left = divStartX + "px";
+      element.style.top = divStartY + "px";
+      element.removeEventListener("mousemove", moveDiv);
+      document.removeEventListener("mousemove", followDiv);
+      element.removeEventListener("keydown", abort);
+    }
+  };
+  // 滑鼠點擊（mouse-click） div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
+  element.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!dragging) {
+      for (let j = 0; j < target.length; j++) {
+        const other = target[j];
+        if (other.style.backgroundColor === "rgb(0, 0, 255)") {
+          other.style.backgroundColor = "red";
+        }
+      }
+      element.style.backgroundColor = "#00f";
+    }
+  });
+  // 長按（mouse down） div 並移動 - 使點擊的 div 隨著滑鼠移動直到放開左鍵。該 div 不應更換顏色，亦即該移動行為不應改變選取的目標。
+  element.addEventListener("mousedown", (e) => {
+    dragging = false;
+    escaping = false;
+    mouseStartX = e.clientX;
+    mouseStartY = e.clientY;
+    divStartX = element.offsetLeft;
+    divStartY = element.offsetTop;
+    element.addEventListener("mousemove", moveDiv);
+    element.addEventListener("keydown", abort);
+  });
+  element.addEventListener("mouseup", () => {
+    element.removeEventListener("keydown", abort);
+    element.removeEventListener("mousemove", moveDiv);
+    followingElement = null;
+  });
+  // 滑鼠雙擊（mouse double click） div - 選取點擊的 div （改變顏色並取消選取其他 div），同時觸發一個「跟隨模式」使該 div 跟著滑鼠移動（即使放開按鍵）。該 div 應在下次 mouse up 事件發生時停止跟隨滑鼠。在這個模式下，任何其他點擊行為將不會被觸發（e.g. 點擊其他div將不會選取它）。
+  element.addEventListener("dblclick", (e) => {
+    e.preventDefault();
+    divStartX = element.offsetLeft;
+    divStartY = element.offsetTop;
+    followingElement = element;
+    document.addEventListener("mousemove", followDiv);
+    element.addEventListener("keydown", abort);
+  });
+}
+
+// 滑鼠點擊背景 - 取消選取任何 div 。
+const workspace = document.getElementById("workspace");
+workspace.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!escaping) {
+    for (let j = 0; j < target.length; j++) {
+      const other = target[j];
+      if (other.style.backgroundColor === "rgb(0, 0, 255)") {
+        other.style.backgroundColor = "red";
+      }
+    }
+  } else {
+    escaping = false;
+  }
+});
