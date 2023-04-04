@@ -26,7 +26,7 @@ let mouseStartX = 0;
 let mouseStartY = 0;
 let touchStartDistance = 0;
 let touchMoveDistance = 0;
-
+let selectDiv = null;
 const followDiv = (e) => {
   if (mode === 0) {
     if (followingElement !== null) {
@@ -46,12 +46,6 @@ const dragDiv = (e) => {
   const touchOffsetY = e.touches[0].clientY - initialTouchPos.y;
   currentElement.style.left = divStartX + touchOffsetX + "px";
   currentElement.style.top = divStartY + touchOffsetY + "px";
-  if (e.touches.length === 2) {
-    touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
-    let deltaDistance = touchMoveDistance - touchStartDistance;
-    let scale = 1 + deltaDistance / 100;
-    element.style.transform = `scale(${scale})`;
-  }
 };
 for (let i = 0; i < target.length; i++) {
   const element = target[i];
@@ -143,8 +137,6 @@ for (let i = 0; i < target.length; i++) {
       lastTapX = touch.clientX;
       lastTapY = touch.clientY;
       lastTouches = 1;
-    } else if (e.touches.length === 2) {
-      touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
     }
   });
   element.addEventListener("touchmove", dragDiv);
@@ -175,6 +167,7 @@ for (let i = 0; i < target.length; i++) {
             }
           }
           element.style.backgroundColor = "#00f";
+          selectDiv = element;
         }
       }
     }
@@ -194,6 +187,7 @@ workspace.addEventListener("click", (e) => {
         other.style.backgroundColor = "red";
       }
     }
+    selectDiv = null;
   } else {
     escaping = false;
   }
@@ -211,6 +205,9 @@ workspace.addEventListener("touchstart", function (e) {
     currentElement.removeEventListener("touchmove", dragDiv);
     followingElement = null;
     currentElement = null;
+  } else if (e.touches.length === 2 && lastTouches === 0) {
+    console.log("start");
+    touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
   }
 });
 workspace.addEventListener("touchend", function (e) {
@@ -227,6 +224,7 @@ workspace.addEventListener("touchend", function (e) {
             other.style.backgroundColor = "red";
           }
         }
+        selectDiv = null;
       } else {
         escaping = false;
       }
@@ -234,4 +232,12 @@ workspace.addEventListener("touchend", function (e) {
   }
   initialTouchPos = { x: 0, y: 0 };
 });
-workspace.addEventListener("touchmove", function (e) {});
+workspace.addEventListener("touchmove", (e) => {
+  if (e.touches.length === 2) {
+    console.log("hi");
+    touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
+    let deltaDistance = touchMoveDistance - touchStartDistance;
+    let scale = 1 + deltaDistance / 100;
+    selectDiv.style.transform = `scale(${scale})`;
+  }
+});
