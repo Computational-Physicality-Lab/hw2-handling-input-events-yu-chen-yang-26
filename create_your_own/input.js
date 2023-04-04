@@ -56,7 +56,11 @@ const scaling = (e) => {
       touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
-      console.log(scale, (scale * 100 - 100) / 2);
+      console.log(
+        `scaleX(${scale}) translate(${(scale * 100 - 100) / 2}%, ${
+          (scale * 100 - 100) / 2
+        }%);`
+      );
       selectDiv.style.transform = `scaleX(${scale}) translate(${
         (scale * 100 - 100) / 2
       }%, ${(scale * 100 - 100) / 2}%);`;
@@ -64,7 +68,11 @@ const scaling = (e) => {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
-      console.log(scale, (scale * 100 - 100) / 2);
+      console.log(
+        `scaleX(${scale}) translate(${(scale * 100 - 100) / 2}%, ${
+          (scale * 100 - 100) / 2
+        }%);`
+      );
       selectDiv.style.transform = `scaleY(${scale}) translate(${
         (scale * 100 - 100) / 2
       }%, ${(scale * 100 - 100) / 2}%);`;
