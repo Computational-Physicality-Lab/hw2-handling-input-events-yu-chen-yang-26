@@ -236,9 +236,11 @@ workspace.addEventListener("touchstart", function (e) {
     }
     workspace.addEventListener("touchmove", scaling);
   } else if (e.touches.length === 3) {
-    console.log("escape", divStartWidth);
+    console.log("escape", divStartWidth, divStartHeight);
+    console.log(selectDiv.style.width, selectDiv.style.height);
     selectDiv.style.width = divStartWidth;
     selectDiv.style.height = divStartHeight;
+    console.log(selectDiv.style.width, selectDiv.style.height);
     workspace.removeEventListener("touchmove", scaling);
   }
 });
