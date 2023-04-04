@@ -206,7 +206,6 @@ workspace.addEventListener("touchstart", function (e) {
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
-    console.log("start");
     touchStartDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
   }
 });
@@ -234,10 +233,10 @@ workspace.addEventListener("touchend", function (e) {
 });
 workspace.addEventListener("touchmove", (e) => {
   if (e.touches.length === 2) {
-    console.log("hi");
     touchMoveDistance = abs(e.touches[0].clientX - e.touches[1].clientX);
     let deltaDistance = touchMoveDistance - touchStartDistance;
     let scale = 1 + deltaDistance / 100;
+    console.log(deltaDistance, scale);
     selectDiv.style.transform = `scale(${scale})`;
   }
 });
