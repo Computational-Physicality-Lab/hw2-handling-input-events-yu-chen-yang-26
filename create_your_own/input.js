@@ -54,12 +54,15 @@ const scaling = (e) => {
   if (e.touches.length === 2) {
     if (scalingMode === 0) {
       touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+      let deltaDistance = touchMoveDistance - touchStartDistance;
+      let scale = 1 + deltaDistance / 100;
+      selectDiv.style.width = divStartWidth * scale + "px";
     } else {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
+      let deltaDistance = touchMoveDistance - touchStartDistance;
+      let scale = 1 + deltaDistance / 100;
+      selectDiv.style.height = divStartHeight * scale + "px";
     }
-    let deltaDistance = touchMoveDistance - touchStartDistance;
-    let scale = 1 + deltaDistance / 100;
-    selectDiv.style.transform = `scale(${scale})`;
   }
 };
 for (let i = 0; i < target.length; i++) {
