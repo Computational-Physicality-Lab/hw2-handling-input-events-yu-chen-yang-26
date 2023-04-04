@@ -190,6 +190,8 @@ workspace.addEventListener("touchstart", function (e) {
     document.removeEventListener("touchmove", followDiv);
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
+    console.log(divStartX, divStartY);
+    console.log(currentElement.style.left, currentElement.style.top);
     followingElement = null;
   }
 });
