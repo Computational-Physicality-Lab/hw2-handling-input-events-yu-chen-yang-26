@@ -217,9 +217,12 @@ workspace.addEventListener("touchstart", function (e) {
   } else if (e.touches.length === 2 && lastTouches === 0) {
     divStartWidth = selectDiv.style.width;
     divStartHeight = selectDiv.style.height;
+    console.log(divStartWidth, divStartHeight);
     touchStartDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
     workspace.addEventListener("touchmove", scaling);
   } else if (e.touches.length === 3) {
+    console.log("escape");
+    console.log(divStartWidth, divStartHeight);
     selectDiv.style.width = divStartWidth;
     selectDiv.style.height = divStartHeight;
     workspace.removeEventListener("touchmove", scaling);
