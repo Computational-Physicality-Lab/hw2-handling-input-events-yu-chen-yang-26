@@ -56,11 +56,13 @@ const scaling = (e) => {
       touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
+      console.log(divStartWidth * scale + "px");
       selectDiv.style.width = divStartWidth * scale + "px";
     } else {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
+      console.log(divStartHeight * scale + "px");
       selectDiv.style.height = divStartHeight * scale + "px";
     }
   }
