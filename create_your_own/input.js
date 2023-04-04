@@ -99,7 +99,7 @@ for (let i = 0; i < target.length; i++) {
   });
 
   // 單指點擊div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
-  element.addEventListener("touchstart", function (e) {
+  element.addEventListener("touchstart", (e) => {
     e.preventDefault();
     mode = 1;
     if (e.touches.length === 1) {
@@ -118,7 +118,9 @@ for (let i = 0; i < target.length; i++) {
         followingElement = element;
         document.addEventListener("touchmove", followDiv);
         element.addEventListener("keydown", abort);
-        lastTapTime = 0;
+        lastTapTime = now;
+        lastTapX = touch.clientX;
+        lastTapY = touch.clientY;
       } else {
         lastTapTime = now;
         lastTapX = touch.clientX;
@@ -127,8 +129,19 @@ for (let i = 0; i < target.length; i++) {
     }
   });
   element.addEventListener("touchmove", function (e) {});
-  element.addEventListener("touchend", function (e) {
+  element.addEventListener("touchend", (e) => {
     e.preventDefault();
+    const now = Date.now();
+    const touch = e.changedTouches[0];
+    if (
+      now - lastTapTime < doubleTapDelay &&
+      Math.abs(touch.pageX - lastTapX) < 10 &&
+      Math.abs(touch.pageY - lastTapY) < 10
+    ) {
+      element.removeEventListener("keydown", abort);
+      document.removeEventListener("touchmove", followDiv);
+      followingElement = null;
+    }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
       var dx = e.changedTouches[0].pageX - initialTouchPos.x;
       var dy = e.changedTouches[0].pageY - initialTouchPos.y;
