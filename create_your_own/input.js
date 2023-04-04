@@ -238,8 +238,8 @@ workspace.addEventListener("touchstart", function (e) {
   } else if (e.touches.length === 3) {
     console.log("escape", divStartWidth, divStartHeight);
     console.log(selectDiv.style.width, selectDiv.style.height);
-    selectDiv.style.width = divStartWidth;
-    selectDiv.style.height = divStartHeight;
+    selectDiv.style.width = "300px";
+    selectDiv.style.height = "300px";
     console.log(selectDiv.style.width, selectDiv.style.height);
     workspace.removeEventListener("touchmove", scaling);
   }
