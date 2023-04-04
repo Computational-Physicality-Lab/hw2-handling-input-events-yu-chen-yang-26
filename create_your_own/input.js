@@ -19,6 +19,7 @@ let lastTapY = 0;
 const doubleTapDelay = 300;
 let mode = 0;
 let lastTouches = 0;
+let currentElement = null;
 const followDiv = (e) => {
   if (mode === 0) {
     if (followingElement !== null) {
@@ -101,6 +102,7 @@ for (let i = 0; i < target.length; i++) {
   /////////////////////////////////////////////////////
   // 單指點擊div - 選取所點擊的 div ，將其顏色改為藍色（#00f），並取消選取任何已被選取的其他 div 。
   element.addEventListener("touchstart", (e) => {
+    currentElement = element;
     e.preventDefault();
     mode = 1;
     if (e.touches.length === 1) {
@@ -127,6 +129,7 @@ for (let i = 0; i < target.length; i++) {
   });
   element.addEventListener("touchmove", function (e) {});
   element.addEventListener("touchend", (e) => {
+    currentElement = null;
     e.preventDefault();
     const now = Date.now();
     const touch = e.changedTouches[0];
@@ -184,8 +187,8 @@ workspace.addEventListener("touchstart", function (e) {
     initialTouchPos.y = e.touches[0].pageY;
   } else if (e.touches.length === 2 && lastTouches === 1) {
     document.removeEventListener("touchmove", followDiv);
-    element.style.left = divStartX + "px";
-    element.style.top = divStartY + "px";
+    currentElement.style.left = divStartX + "px";
+    currentElement.style.top = divStartY + "px";
     followingElement = null;
   }
 });
