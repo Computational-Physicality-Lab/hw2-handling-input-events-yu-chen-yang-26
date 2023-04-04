@@ -103,6 +103,7 @@ for (let i = 0; i < target.length; i++) {
   element.addEventListener("touchstart", (e) => {
     e.preventDefault();
     mode = 1;
+    console.log(e.touches.length, lastTouches);
     if (e.touches.length === 1) {
       initialTouchPos.x = e.touches[0].pageX;
       initialTouchPos.y = e.touches[0].pageY;
@@ -126,6 +127,7 @@ for (let i = 0; i < target.length; i++) {
       lastTouches = 1;
     }
     if (e.touches.length === 2 && lastTouches === 1) {
+      console.log("hi");
       element.removeEventListener("keydown", abort);
       document.removeEventListener("touchmove", followDiv);
       followingElement = null;
