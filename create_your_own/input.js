@@ -186,6 +186,7 @@ workspace.addEventListener("touchstart", function (e) {
     initialTouchPos.y = e.touches[0].pageY;
   } else if (e.touches.length === 2 && lastTouches === 1) {
     console.log("hi");
+    console.log(currentElement.style.left, currentElement.style.top);
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
     console.log(divStartX, divStartY);
