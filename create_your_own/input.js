@@ -142,6 +142,9 @@ for (let i = 0; i < target.length; i++) {
     currentElement = element;
     e.preventDefault();
     mode = 1;
+    if (lastTouches === 3) {
+      return;
+    }
     if (e.touches.length === 1) {
       initialTouchPos.x = e.touches[0].clientX;
       initialTouchPos.y = e.touches[0].clientY;
@@ -219,6 +222,9 @@ workspace.addEventListener("click", (e) => {
 // 單指點擊背景 - 取消選取任何 div 。
 workspace.addEventListener("touchstart", function (e) {
   e.preventDefault();
+  if (lastTouches === 3) {
+    return;
+  }
   if (e.touches.length === 1) {
     initialTouchPos.x = e.touches[0].pageX;
     initialTouchPos.y = e.touches[0].pageY;
@@ -232,7 +238,6 @@ workspace.addEventListener("touchstart", function (e) {
   } else if (e.touches.length === 2 && lastTouches === 0) {
     divStartWidth = selectDiv.offsetWidth;
     divStartHeight = selectDiv.offsetHeight;
-    console.log(divStartWidth, divStartHeight);
     let X = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
     let Y = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
     if (X < Y) {
@@ -244,7 +249,7 @@ workspace.addEventListener("touchstart", function (e) {
     }
     workspace.addEventListener("touchmove", scaling);
   } else if (e.touches.length === 3) {
-    console.log(divStartWidth, divStartHeight);
+    lastTouches = 3;
     selectDiv.style.width = divStartWidth + "px";
     selectDiv.style.height = divStartHeight + "px";
     workspace.removeEventListener("touchmove", scaling);
@@ -253,6 +258,9 @@ workspace.addEventListener("touchstart", function (e) {
 
 workspace.addEventListener("touchend", function (e) {
   e.preventDefault();
+  if (e.touches.length === 0) {
+    lastTouches = 0;
+  }
   if (e.touches.length === 0 && e.changedTouches.length === 1) {
     var dx = e.changedTouches[0].pageX - initialTouchPos.x;
     var dy = e.changedTouches[0].pageY - initialTouchPos.y;
