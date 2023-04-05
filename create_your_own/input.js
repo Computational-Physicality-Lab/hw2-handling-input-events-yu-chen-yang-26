@@ -239,6 +239,7 @@ workspace.addEventListener("touchstart", function (e) {
     lastTouches = 2;
     divStartWidth = selectDiv.offsetWidth;
     divStartHeight = selectDiv.offsetHeight;
+    console.log(divStartWidth, divStartHeight);
     let X = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
     let Y = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
     if (X < Y) {
