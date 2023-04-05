@@ -261,6 +261,7 @@ workspace.addEventListener("touchstart", function (e) {
 workspace.addEventListener("touchend", function (e) {
   e.preventDefault();
   if (e.touches.length === 0) {
+    workspace.removeEventListener("touchmove", scaling);
     lastTouches = 0;
   }
   if (e.touches.length === 0 && e.changedTouches.length === 1) {
