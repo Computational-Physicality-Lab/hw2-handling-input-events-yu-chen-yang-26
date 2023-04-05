@@ -237,6 +237,7 @@ workspace.addEventListener("touchstart", function (e) {
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
+    lastTouches = 2;
     divStartWidth = selectDiv.offsetWidth;
     divStartHeight = selectDiv.offsetHeight;
     let X = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
@@ -249,7 +250,7 @@ workspace.addEventListener("touchstart", function (e) {
       scalingMode = 0;
     }
     workspace.addEventListener("touchmove", scaling);
-  } else if (e.touches.length === 3) {
+  } else if (e.touches.length === 3 && lastTouches === 2) {
     lastTouches = 3;
     selectDiv.style.width = divStartWidth + "px";
     selectDiv.style.height = divStartHeight + "px";
