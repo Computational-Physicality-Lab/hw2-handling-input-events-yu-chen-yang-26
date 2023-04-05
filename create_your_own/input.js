@@ -56,15 +56,21 @@ const scaling = (e) => {
       touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
+      const origTranslateX = (divStartWidth - divStartWidth * scale) / 2;
       const newWidth = divStartWidth * scale;
-      // selectDiv.style.transform = `scaleX(${scale})`;
+      const newTranslateX = (divStartWidth - newWidth) / 2;
+      selectDiv.style.transform = `scaleX(${scale}) 
+      translateX(${origTranslateX - newTranslateX}px)`;
       selectDiv.style.width = `${newWidth}px`;
     } else {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
       const newHeight = divStartHeight * scale;
-      // selectDiv.style.transform = `scaleY(${scale})`;
+      const origTranslateY = (divStartHeight - divStartHeight * scale) / 2;
+      const newTranslateY = (divStartHeight - newHeight) / 2;
+      selectDiv.style.transform = `scaleY(${scale}) 
+      translateY(${origTranslateY - newTranslateY}px)`;
       selectDiv.style.height = `${newHeight}px`;
     }
   }
