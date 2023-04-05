@@ -172,16 +172,17 @@ for (let i = 0; i < target.length; i++) {
     e.preventDefault();
     const now = Date.now();
     const touch = e.changedTouches[0];
-    lastTouches = 0;
     if (
       now - lastTapTime < doubleTapDelay &&
       Math.abs(touch.pageX - lastTapX) < 10 &&
       Math.abs(touch.pageY - lastTapY) < 10
     ) {
+      lastTouches = 0;
       document.removeEventListener("touchmove", followDiv);
       followingElement = null;
     }
     if (e.touches.length === 0 && e.changedTouches.length === 1) {
+      lastTouches = 0;
       var dx = e.changedTouches[0].pageX - initialTouchPos.x;
       var dy = e.changedTouches[0].pageY - initialTouchPos.y;
       var distance = Math.sqrt(dx * dx + dy * dy);
