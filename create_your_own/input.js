@@ -223,7 +223,6 @@ workspace.addEventListener("click", (e) => {
 // 單指點擊背景 - 取消選取任何 div 。
 workspace.addEventListener("touchstart", function (e) {
   e.preventDefault();
-  console.log(e.touches.length, lastTouches);
   if (lastTouches === 3) {
     return;
   }
