@@ -234,7 +234,6 @@ workspace.addEventListener("touchstart", function (e) {
     currentElement.style.left = divStartX + "px";
     currentElement.style.top = divStartY + "px";
     document.removeEventListener("touchmove", followDiv);
-    currentElement.removeEventListener("touchmove", dragDiv);
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
