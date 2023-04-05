@@ -57,14 +57,14 @@ const scaling = (e) => {
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
       const newWidth = divStartWidth * scale;
-      selectDiv.style.transform = `scaleX(${scale})`;
+      // selectDiv.style.transform = `scaleX(${scale})`;
       selectDiv.style.width = `${newWidth}px`;
     } else {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
       const newHeight = divStartHeight * scale;
-      selectDiv.style.transform = `scaleY(${scale})`;
+      // selectDiv.style.transform = `scaleY(${scale})`;
       selectDiv.style.height = `${newHeight}px`;
     }
   }
@@ -74,7 +74,7 @@ for (let i = 0; i < target.length; i++) {
   element.setAttribute("tabindex", "1");
   element.style.minWidth = "20px";
   element.style.minHeight = "20px";
-  element.style.transformOrigin = "50% 50%";
+  element.style.transformOrigin = "center center";
   const moveDiv = (e) => {
     dragging = true;
     const mouseOffsetX = e.clientX - mouseStartX;
