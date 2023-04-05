@@ -56,14 +56,16 @@ const scaling = (e) => {
       touchMoveDistance = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
-      console.log(`scaleX(${scale})`);
+      const newWidth = divStartWidth * scale;
       selectDiv.style.transform = `scaleX(${scale})`;
+      selectDiv.style.width = `${newWidth}px`;
     } else {
       touchMoveDistance = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
       let deltaDistance = touchMoveDistance - touchStartDistance;
       let scale = 1 + deltaDistance / 100;
-      console.log(`scaleX(${scale})`);
+      const newHeight = divStartHeight * scale;
       selectDiv.style.transform = `scaleY(${scale})`;
+      selectDiv.style.height = `${newHeight}px`;
     }
   }
 };
@@ -226,8 +228,8 @@ workspace.addEventListener("touchstart", function (e) {
     followingElement = null;
     currentElement = null;
   } else if (e.touches.length === 2 && lastTouches === 0) {
-    divStartWidth = selectDiv.style.width;
-    divStartHeight = selectDiv.style.height;
+    divStartWidth = selectDiv.offsetWidth;
+    divStartHeight = selectDiv.offsetHeight;
     let X = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
     let Y = Math.abs(e.touches[0].clientY - e.touches[1].clientY);
     if (X < Y) {
@@ -239,8 +241,8 @@ workspace.addEventListener("touchstart", function (e) {
     }
     workspace.addEventListener("touchmove", scaling);
   } else if (e.touches.length === 3) {
-    selectDiv.style.width = divStartWidth;
-    selectDiv.style.height = divStartHeight;
+    selectDiv.style.width = divStartWidth + "px";
+    selectDiv.style.height = divStartHeight + "px";
     workspace.removeEventListener("touchmove", scaling);
   }
 });
